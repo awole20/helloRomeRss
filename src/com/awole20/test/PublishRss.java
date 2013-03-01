@@ -16,7 +16,7 @@ import com.sun.syndication.io.FeedException;
 public class PublishRss extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	
-	private RomeTest testRss = new RomeTest();
+	private RomeTest testRss;
     /**
      * @see HttpServlet#HttpServlet()
      */
@@ -30,11 +30,20 @@ public class PublishRss extends HttpServlet {
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		String prefix = this.getServletContext().getRealPath("/");
+		try {
+			testRss = new RomeTest(prefix + "rss");
+		} catch (IllegalArgumentException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		} catch (FeedException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
 		testRss.addEntry("1","test1");
 		testRss.addEntry("2","test2");
 		testRss.addEntry("3","test3");
 		try {
-			testRss.publish(prefix + "rss");
+			testRss.publish();
 		} catch (FeedException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
